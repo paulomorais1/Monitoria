@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import OpenSelectionProcess from './components/OpenSelectionProcess';
+import ClassRanking from './components/ClassRanking';
+import RestrictedArea from './components/Restrict/RestrictedArea';
+import Login from './components/Restrict/Login';
+import ErrorBoundary from './components/ErrorBoundary'; // Adicione esta linha
 
-function App() {
+const App = () => {
+  const [isAuthenticated, setAuthenticated] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <ErrorBoundary> {/* Adicione esta linha */}
+        <Routes>
+          <Route path="/login" element={<Login setAuthenticated={setAuthenticated} />} />
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? <Navigate to="/restricted-area" /> : <Navigate to="/login" />
+            }
+          />
+          <Route path="/open-selection-process" element={<OpenSelectionProcess />} />
+         
+          <Route path="/class-ranking" element={<ClassRanking />} />
+          <Route
+            path="/restricted-area"
+            element={isAuthenticated ? <RestrictedArea /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </ErrorBoundary> {/* Adicione esta linha */}
+    </Router>
   );
-}
+};
 
 export default App;
