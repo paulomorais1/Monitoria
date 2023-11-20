@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Typography, Button, Modal, Box } from '@mui/material';
+import { Typography, Button, Modal, Box, Link } from '@mui/material';
 import './restrictedArea.css';
 import { ToastContainer } from 'react-toastify';
-
 import MonitorList from './MonitorList';
 import AddMonitor from '../Monitor/AddMonitor';
 
 const RestrictedArea = ({ isAuthenticated }) => {
-  console.log('Renderizando o componente RestrictedArea');
-
   const [openAddMonitor, setOpenAddMonitor] = useState(false);
+  const [selectedMonitorType, setSelectedMonitorType] = useState(null);
 
   const handleOpenAddMonitor = () => {
     setOpenAddMonitor(true);
@@ -18,10 +16,14 @@ const RestrictedArea = ({ isAuthenticated }) => {
   const handleCloseAddMonitor = () => {
     setOpenAddMonitor(false);
   };
-  const getUsers = () => {
-    console.log('Obtendo usuários...'); 
+
+  const handleMonitorTypeClick = (monitorType) => {
+    setSelectedMonitorType(monitorType);
   };
 
+  const getUsers = () => {
+    console.log('Obtendo usuários...');
+  };
 
   return (
     <div className="container">
@@ -29,15 +31,19 @@ const RestrictedArea = ({ isAuthenticated }) => {
         <Typography variant="h4">Área Restrita</Typography>
       </div>
       <div className="actions">
-        <Typography variant="h5">Ações Disponíveis</Typography>
+      
         <Button variant="contained" onClick={handleOpenAddMonitor}>
           Adicionar Novo Monitor
         </Button>
-        <Button variant="contained">Editar Monitores</Button>
-        <Button variant="contained">Iniciar Novo Processo de Seleção</Button>
+        <Button variant="contained"  onClick={() => handleMonitorTypeClick('MD')}>
+          Monitores MD
+        </Button>
+        <Button variant="contained"  onClick={() => handleMonitorTypeClick('MIDIT')}>
+          Monitores MIDIT
+        </Button>
       </div>
       <div className="main-content">
-        <MonitorList element  />
+        <MonitorList monitorType={selectedMonitorType} />
         <Modal
           open={openAddMonitor}
           onClose={handleCloseAddMonitor}
@@ -51,12 +57,12 @@ const RestrictedArea = ({ isAuthenticated }) => {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 400,
-              bgcolor: 'background.paper',      
+              bgcolor: 'background.paper',
               boxShadow: '0px 0px 5px #ccc',
               p: 4,
             }}
           >
-           <AddMonitor getUsers={getUsers} />
+            <AddMonitor getUsers={getUsers} />
             <ToastContainer />
           </Box>
         </Modal>

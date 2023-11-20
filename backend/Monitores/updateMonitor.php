@@ -1,8 +1,7 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:3000');
-header('Access-Control-Allow-Methods: GET, OPTIONS, POST, PUT');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Methods: PUT");
+header("Access-Control-Allow-Headers: Content-Type");
 
 // Inclui o arquivo db.php
 include('../db.php');
@@ -22,26 +21,39 @@ try {
     // Obter dados do corpo da requisição PUT
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Verificar se os campos necessários estão presentes e não vazios
-    if (
-        !isset($data['id']) || empty($data['id']) ||
-        !isset($data['Nome']) || empty($data['Nome']) ||
-        !isset($data['Email']) || empty($data['Email']) ||
-        !isset($data['Ra']) || empty($data['Ra']) ||
-        !isset($data['Tipo']) || empty($data['Tipo'])
-    ) {
-        throw new Exception('Todos os campos são obrigatórios. Certifique-se de preencher todos os campos.');
+    // Verificar se o campo 'id' está presente
+    if (!isset($data['ID']) || empty($data['ID'])) {
+        throw new Exception('O campo "id" é obrigatório.');
     }
 
     // Dados a serem atualizados
-    $id = $data['id'];
-    $nome = $data['Nome'];
-    $email = $data['Email'];
-    $ra = $data['Ra'];
-    $tipo = $data['Tipo'];
+    $id = $data['ID'];
 
     // Consulta SQL de atualização
-    $sqlUpdate = "UPDATE monitores SET Nome='$nome', Email='$email', Ra='$ra', Tipo='$tipo' WHERE id=$id";
+    $sqlUpdate = "UPDATE monitores SET ";
+
+    // Verificar e adicionar os campos que foram fornecidos na requisição
+    if (isset($data['Nome']) && !empty($data['Nome'])) {
+        $sqlUpdate .= "Nome='{$data['Nome']}', ";
+    }
+
+    if (isset($data['Email']) && !empty($data['Email'])) {
+        $sqlUpdate .= "Email='{$data['Email']}', ";
+    }
+
+    if (isset($data['Ra']) && !empty($data['Ra'])) {
+        $sqlUpdate .= "Ra='{$data['Ra']}', ";
+    }
+
+    if (isset($data['Tipo']) && !empty($data['Tipo'])) {
+        $sqlUpdate .= "Tipo='{$data['Tipo']}', ";
+    }
+
+    // Remover a última vírgula, se houver
+    $sqlUpdate = rtrim($sqlUpdate, ', ');
+
+    // Adicionar a cláusula WHERE
+    $sqlUpdate .= " WHERE id=$id";
 
     // Executar a consulta
     if ($conn->query($sqlUpdate) === TRUE) {
