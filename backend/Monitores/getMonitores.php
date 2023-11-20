@@ -4,18 +4,8 @@ header('Access-Control-Allow-Methods: GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
-// Conexão com o banco de dados (ajuste conforme suas configurações)
-$host = '127.0.0.1';
-$user = 'root';
-$password = '';
-$database = 'monitoria';
-
-$conn = new mysqli($host, $user, $password, $database);
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die('Erro de Conexão: ' . $conn->connect_error);
-}
+// Inclui o arquivo db.php
+include('../db.php');
 
 try {
     // Consulta para obter a lista de monitores

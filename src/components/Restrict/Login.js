@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Container, CssBaseline } from '@mui/material';
+import './login.css';
 
 const Login = ({ setAuthenticated }) => {
   const [username, setUsername] = useState('');
@@ -44,11 +45,11 @@ const Login = ({ setAuthenticated }) => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className="login-container">
       <CssBaseline />
       <div>
         <Typography component="h1" variant="h5">
-          Login
+          Login Restrito
         </Typography>
         <form>
           <TextField
