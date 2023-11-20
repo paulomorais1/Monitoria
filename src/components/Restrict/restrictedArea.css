@@ -14,7 +14,7 @@
   
   .main-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 10px;
     margin-top: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -30,10 +30,11 @@
     border-bottom: 1px solid #ddd;
   }
   
-  .actions {
+  .actions  {
     margin-top: 20px;
-    display: flex;
+    display: block;
   }
+
   
   .actions button {
     margin-right: 10px;

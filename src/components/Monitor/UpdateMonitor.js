@@ -50,13 +50,6 @@ const StyledButton = styled(Button)`
   }
 `;
 
-// Estilizando o botão pequeno
-const SmallButton = styled(StyledButton)`
-  && {
-    font-size: 12px; /* Tamanho de fonte menor para o botão pequeno */
-    /* Outros estilos específicos para o botão pequeno, se necessário */
-  }
-`;
 
 
 

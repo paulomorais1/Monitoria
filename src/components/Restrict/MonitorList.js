@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-no-undef */
 import React, { useState, useEffect } from "react";
 import UpdateMonitor from "../Monitor/UpdateMonitor";
 import {
@@ -10,17 +11,18 @@ import {
   Snackbar,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import './MonitorList.css';
+import "./MonitorList.css";
+import DeleteMonitor from "../Monitor/DeleteMonitor";
+import { toast } from "react-toastify";
 
-
-
-const MonitorList = ({ monitorType }) => {
+const MonitorList = ({ monitorType, onDelete, getUsers  }) => {
   const [monitorData, setMonitorData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingMonitorID, setEditingMonitorID] = useState(null);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
+  const [deletedMonitorID, setDeletedMonitorID] = useState(null);
 
   useEffect(() => {
     const getMonitorData = async () => {
@@ -55,10 +57,19 @@ const MonitorList = ({ monitorType }) => {
     };
 
     getMonitorData();
-  }, [monitorType]);
+  }, [monitorType, deletedMonitorID]);
 
   const handleEditClick = (monitorID) => {
     setEditingMonitorID(monitorID);
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await onDelete(deletedMonitorID); // Atualiza o estado no componente pai, se necessário
+      setDeletedMonitorID(null); // Limpa o ID do monitor excluído
+    } catch (error) {
+      console.error("Erro ao processar exclusão:", error);
+    }
   };
 
   const closeModal = () => {
@@ -80,9 +91,11 @@ const MonitorList = ({ monitorType }) => {
         <div className="row">
           <div className="col-md-10 mt-4">
             <h5 className="mb-4">
-            {monitorType === 'MD'  ? 'Monitores MD' : 'MD' || monitorType === 'MIDIT' ? 'Programa de Monitoria de Iniciação em Desenvolvimento Tecnológico e Inovação ' : ' MIDTI'
-}
-
+              {monitorType === "MD"
+                ? "Monitores MD"
+                : "MD" || monitorType === "MIDIT"
+                ? "Programa de Monitoria de Iniciação em Desenvolvimento Tecnológico e Inovação "
+                : " MIDTI"}
             </h5>
             <table className="table">
               <thead>
@@ -93,6 +106,7 @@ const MonitorList = ({ monitorType }) => {
                   <th>Ra</th>
                   <th>Tipo</th>
                   <th>Editar</th>
+                  <th>Del</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,6 +121,15 @@ const MonitorList = ({ monitorType }) => {
                       <button onClick={() => handleEditClick(monitor.ID)}>
                         Editar
                       </button>
+                    </td>
+                    <td>
+                      <DeleteMonitor
+                        setError={setError}
+                        toast={toast}
+                        onDelete={(deletedID) => setDeletedMonitorID(deletedID)}
+                        setLoading={setLoading}
+                        monitorData={monitor}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -140,20 +163,28 @@ const MonitorList = ({ monitorType }) => {
       {/* Toasts */}
       <Snackbar
         open={showSuccessToast}
-        autoHideDuration={2000}
+        autoHideDuration={1000}
         onClose={handleToastClose}
       >
-        <MuiAlert onClose={handleToastClose} severity="success" sx={{ width: "100%" }}>
+        <MuiAlert
+          onClose={handleToastClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Operação realizada com sucesso!
         </MuiAlert>
       </Snackbar>
 
       <Snackbar
         open={showErrorToast}
-        autoHideDuration={2000}
+        autoHideDuration={1000}
         onClose={handleToastClose}
       >
-        <MuiAlert onClose={handleToastClose} severity="error" sx={{ width: "100%" }}>
+        <MuiAlert
+          onClose={handleToastClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           Ops! Algo deu errado. Verifique a console para detalhes.
         </MuiAlert>
       </Snackbar>

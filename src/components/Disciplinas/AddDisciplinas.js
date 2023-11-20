@@ -44,28 +44,22 @@ const Select = styled.select`
 
 const Label = styled.label``;
 
-const AddMonitor = ({ getUsers, onAdd }) => {
+const AddDisciplinas = ({ getDisciplinas, onAdd }) => {
   const ref = useRef();
-  const [tipoOptions, setTipoOptions] = useState(["MD", "MIDIT"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const monitors = ref.current;
+    const disciplinas = ref.current;
 
-    if (!monitors) {
-      console.error("Referência para monitors é nula ou indefinida.");
+    if (!disciplinas) {
+      console.error("Referência para disciplinas é nula ou indefinida.");
       return;
     }
 
-    if (
-      !monitors.Nome.value ||
-      !monitors.Email.value ||
-      !monitors.Ra.value ||
-      !monitors.Tipo.value
-    ) {
+    if (!disciplinas.Nome.value || !disciplinas.Professor.value) {
       console.error("Preencha todos os campos!");
       return;
     }
@@ -74,10 +68,8 @@ const AddMonitor = ({ getUsers, onAdd }) => {
     setError(null);
 
     const dataToSend = {
-      Nome: monitors.Nome.value,
-      Email: monitors.Email.value,
-      Ra: monitors.Ra.value,
-      Tipo: monitors.Tipo.value,
+      Nome: disciplinas.Nome.value,
+      Professor: disciplinas.Professor.value,
     };
 
     const requestOptions = {
@@ -90,7 +82,7 @@ const AddMonitor = ({ getUsers, onAdd }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/Monitores/addMonitor.php",
+        "http://localhost:8080/Disciplinas/addDisciplina.php",
         requestOptions
       );
 
@@ -98,13 +90,11 @@ const AddMonitor = ({ getUsers, onAdd }) => {
         const data = await response.json();
         console.log("Dados do servidor:", data);
 
-        monitors.Nome.value = "";
-        monitors.Email.value = "";
-        monitors.Ra.value = "";
-        monitors.Tipo.value = "";
+        disciplinas.Nome.value = "";
+        disciplinas.Professor.value = "";
 
-        if (getUsers && typeof getUsers === "function") {
-          getUsers();
+        if (getDisciplinas && typeof getDisciplinas === "function") {
+          getDisciplinas();
         }
 
         if (onAdd && typeof onAdd === "function") {
@@ -112,30 +102,28 @@ const AddMonitor = ({ getUsers, onAdd }) => {
         }
 
         // Exibir Toast de sucesso
-        toast.success("Monitor adicionado com sucesso!");
+        toast.success("Disciplina adicionada com sucesso!");
 
         // Recarrega a página após o sucesso na adição
-        
       } else {
         console.error(
           `Erro na requisição: ${response.status} ${response.statusText}`
         );
         setError(
-          "Erro durante a adição do monitor. Consulte a console para detalhes."
+          "Erro durante a adição da disciplina. Consulte a console para detalhes."
         );
         // Exibir Toast de erro
-        toast.error("Erro ao adicionar monitor. Consulte a console para detalhes.");
+        toast.error("Erro ao adicionar disciplina. Consulte a console para detalhes.");
       }
     } catch (error) {
-      console.error("Erro durante a adição do monitor:", error.message);
+      console.error("Erro durante a adição da disciplina:", error.message);
       setError(
-        "Erro durante a adição do monitor. Consulte a console para detalhes."
+        "Erro durante a adição da disciplina. Consulte a console para detalhes."
       );
       // Exibir Toast de erro
-      toast.error("Erro ao adicionar monitor. Consulte a console para detalhes.");
+      toast.error("Erro ao adicionar disciplina. Consulte a console para detalhes.");
     } finally {
       setLoading(false);
-  
     }
   };
 
@@ -146,26 +134,12 @@ const AddMonitor = ({ getUsers, onAdd }) => {
         <Input name="Nome" />
       </InputArea>
       <InputArea>
-        <Label>Email</Label>
-        <Input name="Email" type="email" />
-      </InputArea>
-      <InputArea>
-        <Label>Ra</Label>
-        <Input name="Ra" />
-      </InputArea>
-      <InputArea>
-        <Label>Tipo</Label>
-        <Select name="Tipo">
-          {tipoOptions.map((tipo, index) => (
-            <option key={index} value={tipo}>
-              {tipo}
-            </option>
-          ))}
-        </Select>
+        <Label>Professor</Label>
+        <Input name="Professor" />
       </InputArea>
 
       <Button variant="contained" type="submit" disabled={loading}>
-        {loading ? "Aguarde..." : "Adicionar Novo Monitor"}
+        {loading ? "Aguarde..." : "Adicionar Nova Disciplina"}
       </Button>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -176,4 +150,4 @@ const AddMonitor = ({ getUsers, onAdd }) => {
   );
 };
 
-export default AddMonitor;
+export default AddDisciplinas;
