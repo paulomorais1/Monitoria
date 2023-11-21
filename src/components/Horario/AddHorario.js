@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { TextField, Button, Paper } from '@mui/material';
 
@@ -17,6 +17,7 @@ const AddHorario = () => {
   const [horarioTermino, setHorarioTermino] = useState('');
   const [monitorID, setMonitorID] = useState('');
   const [disciplinaID, setDisciplinaID] = useState('');
+  const ref = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,9 +60,9 @@ const AddHorario = () => {
   };
 
   return (
-    <AddHorarioContainer>
+    <AddHorarioContainer ref={ref} onSubmit={handleSubmit} >
       <h2>Adicionar Horário</h2>
-      <form onSubmit={handleSubmit}>
+   
         <TextField
           label="Dia da Semana"
           variant="outlined"
@@ -100,7 +101,7 @@ const AddHorario = () => {
         <Button variant="contained" color="primary" type="submit">
           Adicionar Horário
         </Button>
-      </form>
+  
     </AddHorarioContainer>
   );
 };

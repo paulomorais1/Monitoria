@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import {
-  Paper,
-  Button,
-  Snackbar,
-} from '@mui/material';
-import MuiAlert from '@mui/material/Alert';
-import UpdateHorario from './UpdateHorario'; // Importe o componente de atualização
-import DeleteHorario from './DeleteHorario'; // Importe o componente de exclusão
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Paper, Button, Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+import UpdateHorario from "./UpdateHorario";
+import DeleteHorario from "./DeleteHorario";
+import { toast } from "react-toastify";
 
 const HorarioListContainer = styled(Paper)`
   margin: 20px auto;
@@ -21,7 +19,8 @@ const HorarioListContainer = styled(Paper)`
     width: 100%;
     border-collapse: collapse;
 
-    th, td {
+    th,
+    td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
@@ -37,24 +36,20 @@ const HorarioListContainer = styled(Paper)`
   }
 `;
 
-const HorarioList = () => {
+const HorarioList = ({ onDelete, horarioData }) => {
   const [horarios, setHorarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedHorario, setSelectedHorario] = useState(null);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
+  const [deletedHorarioID, setDeletedHorarioID] = useState(null);
 
   const handleEditClick = (id) => {
-    // Abre o formulário de atualização quando o botão Editar é clicado
     const selected = horarios.find((horario) => horario.ID === id);
     setSelectedHorario(selected);
     setShowUpdateForm(true);
-  };
-
-  const handleDeleteClick = (id) => {
-    // Lógica para excluir o item com o ID fornecido
-    console.log(`Excluir o item com ID ${id}`);
   };
 
   const closeModal = () => {
@@ -62,7 +57,7 @@ const HorarioList = () => {
   };
 
   const handleToastClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -71,19 +66,23 @@ const HorarioList = () => {
   };
 
   useEffect(() => {
-    // Carregar horários do servidor ao montar o componente
     const fetchHorarios = async () => {
       try {
-        const response = await fetch('http://localhost:8080/Horario/getHorarios.php');
+        const response = await fetch(
+          "http://localhost:8080/Horario/getHorarios.php"
+        );
         const responseData = await response.json();
 
         if (Array.isArray(responseData.horarios)) {
           setHorarios(responseData.horarios);
         } else {
-          console.error('A resposta do servidor não contém um array de horários:', responseData);
+          console.error(
+            "A resposta do servidor não contém um array de horários:",
+            responseData
+          );
         }
       } catch (error) {
-        console.error('Erro ao buscar horários:', error);
+        console.error("Erro ao buscar horários:", error);
         setShowErrorToast(true);
       } finally {
         setLoading(false);
@@ -91,7 +90,22 @@ const HorarioList = () => {
     };
 
     fetchHorarios();
-  }, []); // Dependência vazia para executar apenas uma vez ao montar
+  }, [deletedHorarioID]);
+
+  const handleDeleteClick = async () => {
+   
+    try {
+      if (!deletedHorarioID) {
+        console.error("ID do horário não definido.");
+        return;
+      }
+
+      await onDelete(deletedHorarioID);
+      setDeletedHorarioID(null);
+    } catch (error) {
+      console.error("Erro ao processar exclusão:", error);
+    }
+  };
 
   return (
     <HorarioListContainer>
@@ -129,7 +143,10 @@ const HorarioList = () => {
                       Editar
                     </Button>
                     <DeleteHorario
-                      onDelete={() => handleDeleteClick(horario.ID)}
+                      setError={setError}
+                      onDelete={() => handleDeleteClick(horario.ID)} // Certifique-se de passar a propriedade correta
+                      setLoading={setLoading}
+                      horarioData={horario} // Certifique-se de passar a propriedade correta
                     />
                   </td>
                 </tr>
@@ -137,7 +154,6 @@ const HorarioList = () => {
             </tbody>
           </table>
 
-          {/* Renderiza o formulário de atualização quando showUpdateForm é true */}
           {showUpdateForm && (
             <UpdateHorario
               horarioDataForUpdate={selectedHorario}
@@ -150,7 +166,6 @@ const HorarioList = () => {
           )}
         </div>
       )}
-      {/* Toasts */}
       <Snackbar
         open={showSuccessToast}
         autoHideDuration={1000}
@@ -159,7 +174,7 @@ const HorarioList = () => {
         <MuiAlert
           onClose={handleToastClose}
           severity="success"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           Operação realizada com sucesso!
         </MuiAlert>
@@ -173,7 +188,7 @@ const HorarioList = () => {
         <MuiAlert
           onClose={handleToastClose}
           severity="error"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           Ops! Algo deu errado. Verifique a console para detalhes.
         </MuiAlert>
