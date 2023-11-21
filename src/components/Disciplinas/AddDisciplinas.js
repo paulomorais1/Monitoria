@@ -82,7 +82,7 @@ const AddDisciplinas = ({ getDisciplinas, onAdd }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/Disciplinas/addDisciplina.php",
+        "http://localhost:8080/Disciplinas/addDisciplinas.php",
         requestOptions
       );
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import ClassRanking from './components/ClassRanking';
-import RestrictedArea from './components/Restrict/RestrictedArea';
 import Login from './components/Restrict/Login';
 import ErrorBoundary from './components/ErrorBoundary'; // Adicione esta linha
-import AddDisciplinas from './components/Disciplinas/AddDisciplinas';
-
+import MonitorRestricted from './components/Monitor/MonitorRestricted';
+import DisciplinasRestricted from './components/Disciplinas/DisciplinasRestricted';
+import HorarioRestricted from './components/Horario/HorarioRestricted';
+import Main from './components/Main';
 const App = () => {
   const [isAuthenticated, setAuthenticated] = useState(false);
 
@@ -17,15 +17,17 @@ const App = () => {
           <Route
             path="/"
             element={
-              isAuthenticated ? <Navigate to="/restricted-area" /> : <Navigate to="/login" />
+              isAuthenticated ? <Navigate to="/Main" /> : <Navigate to="/login" />
             }
           />
-          <Route path="/Disiciplinas" element={<AddDisciplinas />} />
+          <Route path="/gerir-monitores" element={<MonitorRestricted />} />
+
+          <Route path="/gerir-disciplinas" element={<DisciplinasRestricted />} />
+          <Route path="/gerir-horario" element={<HorarioRestricted />} />
          
-          <Route path="/class-ranking" element={<ClassRanking />} />
           <Route
             path="/restricted-area"
-            element={isAuthenticated ? <RestrictedArea /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <Main /> : <Navigate to="/login" />}
           />
         </Routes>
       </ErrorBoundary> {/* Adicione esta linha */}

@@ -1,16 +1,36 @@
-// src/components/Main.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const MainContainer = styled.div`
+  text-align: center;
+  padding: 20px;
+`;
+
+const Heading = styled.h1`
+  color: #333;
+`;
+
+const StyledLink = styled(Link)`
+  display: block;
+  margin: 10px 0;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 18px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const Main = () => {
   return (
-    <div>
-      <h1>Main Page</h1>
-      <Link to="/open-selection-process">Open Selection Process</Link>
-      <Link to="/monitor-list">Monitor List</Link>
-      <Link to="/class-ranking">Class Ranking</Link>
-      <Link to="/restricted-area">Restricted Area</Link>
-    </div>
+    <MainContainer>
+      <Heading>Main Page</Heading>
+      <StyledLink to="/gerir-monitores">Gerir Monitores</StyledLink>
+      <StyledLink to="/gerir-disciplinas">Disciplinas</StyledLink>
+      <StyledLink to="/gerir-horario">Horário</StyledLink>
+    </MainContainer>
   );
 };
 

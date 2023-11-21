@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Typography, Button, Modal, Box } from "@mui/material";
-import "./restrictedArea.css";
+import "./MonitorRestricted.css";
 import { ToastContainer } from "react-toastify";
 import MonitorList from "./MonitorList";
-import AddMonitor from "../Monitor/AddMonitor";
+import AddMonitor from "./AddMonitor";
 
-
-const RestrictedArea = ({ isAuthenticated }) => {
+const MonitorRestricted = ({ isAuthenticated }) => {
   const [openAddMonitor, setOpenAddMonitor] = useState(false);
   const [selectedMonitorType, setSelectedMonitorType] = useState(null);
 
@@ -32,7 +31,6 @@ const RestrictedArea = ({ isAuthenticated }) => {
         <Typography variant="h4">Gerir Monitores</Typography>
       </div>
       <div className="actions">
-        
         <Button variant="contained" onClick={handleOpenAddMonitor}>
           Adicionar Novo Monitor
         </Button>
@@ -49,7 +47,7 @@ const RestrictedArea = ({ isAuthenticated }) => {
           Monitores MIDIT
         </Button>
       </div>
-   
+
       <div className="main-content">
         <MonitorList monitorType={selectedMonitorType} />
         <Modal
@@ -79,4 +77,4 @@ const RestrictedArea = ({ isAuthenticated }) => {
   );
 };
 
-export default RestrictedArea;
+export default MonitorRestricted;
