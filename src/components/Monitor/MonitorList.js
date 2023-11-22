@@ -86,7 +86,7 @@ const MonitorList = ({ monitorType, onDelete }) => {
   return (
     <React.Fragment>
       <div className="container">
-        {/* ... (restante do seu código) */}
+       
         <table className="table">
           <thead>
             <tr>
@@ -102,7 +102,11 @@ const MonitorList = ({ monitorType, onDelete }) => {
           <tbody>
             {monitorData.map((monitor) => (
               <tr key={monitor.ID}>
-                {/* ... (restante do seu código) */}
+                        <td>{monitor.ID}</td>
+                  <td>{monitor.Nome}</td>
+                  <td>{monitor.Email}</td>
+                  <td>{monitor.Ra}</td>
+                  <td>{monitor.Tipo}</td>
                 <td>
                   <button onClick={() => handleEditClick(monitor.ID)}>
                     Editar

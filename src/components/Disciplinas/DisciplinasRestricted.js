@@ -1,24 +1,11 @@
-import React, { useState } from "react";
-import { Typography, Button, Modal, Box } from "@mui/material";
+import React from "react";
+import { Modal, Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import DisciplinasList from "./DisciplinasList";
-import AddDisciplinas from "./AddDisciplinas"; // Certifique-se de ter um componente AddDisciplinas
+import AddDisciplinas from "./AddDisciplinas";
 
-const DisciplinasRestricted = ({ isAuthenticated }) => {
-  const [openAddDisciplinas, setOpenAddDisciplinas] = useState(false);
-  const [selectedDisciplinaType, setSelectedDisciplinaType] = useState(null);
+const DisciplinasRestricted = ({openAddDisciplinas, handleCloseAddDisciplinas  }) => {
 
-  const handleOpenAddDisciplinas = () => {
-    setOpenAddDisciplinas(true);
-  };
 
-  const handleCloseAddDisciplinas = () => {
-    setOpenAddDisciplinas(false);
-  };
-
-  const handleDisciplinaTypeClick = (disciplinaType) => {
-    setSelectedDisciplinaType(disciplinaType);
-  };
 
   const getDisciplinas = () => {
     console.log("Obtendo disciplinas...");
@@ -26,24 +13,10 @@ const DisciplinasRestricted = ({ isAuthenticated }) => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <Typography variant="h4">Gerir Disciplinas</Typography>
-      </div>
-      <div className="actions">
-        <Button variant="contained" onClick={handleOpenAddDisciplinas}>
-          Adicionar Nova Disciplina
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => handleDisciplinaTypeClick("DisciplinaA")}
-        >
-        Disciplinas
-        </Button>
-      
-      </div>
+
+  
       <div className="main-content">
-        <DisciplinasList disciplinaType={selectedDisciplinaType} />
+      
         <Modal
           open={openAddDisciplinas}
           onClose={handleCloseAddDisciplinas}
@@ -66,7 +39,6 @@ const DisciplinasRestricted = ({ isAuthenticated }) => {
             <ToastContainer />
           </Box>
         </Modal>
-      </div>
     </div>
   );
 };

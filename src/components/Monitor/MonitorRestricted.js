@@ -1,55 +1,20 @@
-import React, { useState } from "react";
-import { Typography, Button, Modal, Box } from "@mui/material";
+import React from "react";
+import { Modal, Box } from "@mui/material";
 import "./MonitorRestricted.css";
 import { ToastContainer } from "react-toastify";
-import MonitorList from "./MonitorList";
+
 import AddMonitor from "./AddMonitor";
 
-const MonitorRestricted = ({ isAuthenticated }) => {
-  const [openAddMonitor, setOpenAddMonitor] = useState(false);
-  const [selectedMonitorType, setSelectedMonitorType] = useState(null);
-
-  const handleOpenAddMonitor = () => {
-    setOpenAddMonitor(true);
-  };
-
-  const handleCloseAddMonitor = () => {
-    setOpenAddMonitor(false);
-  };
-
-  const handleMonitorTypeClick = (monitorType) => {
-    setSelectedMonitorType(monitorType);
-  };
+const MonitorRestricted = ({ openAddMonitor, handleCloseAddMonitor }) => {
 
   const getUsers = () => {
     console.log("Obtendo usuários...");
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <Typography variant="h4">Gerir Monitores</Typography>
-      </div>
-      <div className="actions">
-        <Button variant="contained" onClick={handleOpenAddMonitor}>
-          Adicionar Novo Monitor
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => handleMonitorTypeClick("MD")}
-        >
-          Monitores MD
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => handleMonitorTypeClick("MIDIT")}
-        >
-          Monitores MIDIT
-        </Button>
-      </div>
 
       <div className="main-content">
-        <MonitorList monitorType={selectedMonitorType} />
+      
         <Modal
           open={openAddMonitor}
           onClose={handleCloseAddMonitor}
@@ -73,7 +38,7 @@ const MonitorRestricted = ({ isAuthenticated }) => {
           </Box>
         </Modal>
       </div>
-    </div>
+
   );
 };
 

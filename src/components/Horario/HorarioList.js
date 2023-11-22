@@ -71,6 +71,8 @@ const HorarioList = ({ onDelete, horarioData }) => {
         const response = await fetch(
           "http://localhost:8080/Horario/getHorarios.php"
         );
+    
+
         const responseData = await response.json();
 
         if (Array.isArray(responseData.horarios)) {
@@ -95,11 +97,6 @@ const HorarioList = ({ onDelete, horarioData }) => {
   const handleDeleteClick = async () => {
    
     try {
-      if (!deletedHorarioID) {
-        console.error("ID do horário não definido.");
-        return;
-      }
-
       await onDelete(deletedHorarioID);
       setDeletedHorarioID(null);
     } catch (error) {

@@ -1,0 +1,19 @@
+.container{ 
+ display: flex;
+ justify-content: center;
+ text-align: center;
+ flex-wrap: wrap;
+ border: 2px solid red;
+
+}
+
+.header{
+ display: grid;
+ grid-template-columns: 1fr;
+ border: 2px solid red;
+}
+
+.actions{
+    border: 2px solid red;
+    
+}

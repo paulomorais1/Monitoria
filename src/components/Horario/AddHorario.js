@@ -1,14 +1,26 @@
-import React, { useState, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { TextField, Button, Paper } from '@mui/material';
+import { TextField, Button,  Typography } from '@mui/material';
 
-const AddHorarioContainer = styled(Paper)`
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledButton = styled(Button)`
+  && {
+    margin: 0 auto;
+    width: 60%;
+    font-size: 16px;
+  }
+`;
+
+const FormContainer = styled.form`
+  display: grid;
+  grid-template-columns: 20px repeat(auto-fill, 1fr) 50px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background-color: #fff;
+  border-radius: 5px;
+  margin: 0 auto;
+  padding: 10px;
+  width: 80%;
 `;
 
 const AddHorario = () => {
@@ -17,13 +29,15 @@ const AddHorario = () => {
   const [horarioTermino, setHorarioTermino] = useState('');
   const [monitorID, setMonitorID] = useState('');
   const [disciplinaID, setDisciplinaID] = useState('');
+  const [loading, setLoading] = useState(false);
   const ref = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Enviar os dados para o servidor (você pode usar fetch ou axios, por exemplo)
+      setLoading(true);
+
       const response = await fetch('http://localhost:8080/Horario/addHorario.php', {
         method: 'POST',
         headers: {
@@ -38,31 +52,46 @@ const AddHorario = () => {
         }),
       });
 
-      // Verificar se a resposta não está vazia antes de tentar analisar como JSON
       if (!response.ok) {
         throw new Error(`Erro na solicitação: ${response.statusText}`);
       }
 
       const data = await response.json();
-
-      // Exibir feedback ao usuário, como uma mensagem de sucesso ou erro
       console.log(data);
 
-      // Limpar os campos do formulário após o sucesso
       setDiaSemana('');
       setHorarioInicio('');
       setHorarioTermino('');
       setMonitorID('');
       setDisciplinaID('');
+
     } catch (error) {
       console.error('Erro ao enviar dados:', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+      
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [ref]);
+
   return (
-    <AddHorarioContainer ref={ref} onSubmit={handleSubmit} >
-      <h2>Adicionar Horário</h2>
-   
+
+      <FormContainer  ref={ref} onSubmit={handleSubmit}>
+        <Typography variant="h5">Adicionar Horário</Typography>
         <TextField
           label="Dia da Semana"
           variant="outlined"
@@ -98,11 +127,12 @@ const AddHorario = () => {
           value={disciplinaID}
           onChange={(e) => setDisciplinaID(e.target.value)}
         />
-        <Button variant="contained" color="primary" type="submit">
-          Adicionar Horário
-        </Button>
-  
-    </AddHorarioContainer>
+        <StyledButton variant="contained" color="primary" type="submit" disabled={loading}>
+          {loading ? 'Aguarde...' : 'Adicionar Horário'}
+        </StyledButton>
+      
+      </FormContainer>
+
   );
 };
 
