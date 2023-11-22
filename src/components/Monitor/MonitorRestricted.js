@@ -13,7 +13,7 @@ const MonitorRestricted = ({ openAddMonitor, handleCloseAddMonitor }) => {
 
   return (
 
-      <div className="main-content">
+
       
         <Modal
           open={openAddMonitor}
@@ -37,7 +37,7 @@ const MonitorRestricted = ({ openAddMonitor, handleCloseAddMonitor }) => {
             <ToastContainer />
           </Box>
         </Modal>
-      </div>
+
 
   );
 };

@@ -3,6 +3,8 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
 import "react-toastify/dist/ReactToastify.css";
 
 const FormContainer = styled.form`
@@ -41,8 +43,12 @@ const Select = styled.select`
   height: 40px;
   width: 90%;
 `;
-
+const StyledStack = styled(Stack)`
+display:flex;
+justify-content:center;
+`;
 const Label = styled.label``;
+// ... (importações existentes)
 
 const AddMonitor = ({ getUsers, onAdd }) => {
   const ref = useRef();
@@ -53,6 +59,12 @@ const AddMonitor = ({ getUsers, onAdd }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      // Faça algo com o arquivo, se necessário
+      console.log("Arquivo selecionado:", file);
+    };
+    
     const monitors = ref.current;
 
     if (!monitors) {
@@ -135,8 +147,12 @@ const AddMonitor = ({ getUsers, onAdd }) => {
       toast.error("Erro ao adicionar monitor. Consulte a console para detalhes.");
     } finally {
       setLoading(false);
-  
     }
+  };
+
+  const isMdSelected = () => {
+    const monitors = ref.current;
+    return monitors && monitors.Tipo.value === "MD";
   };
 
   return (
@@ -163,12 +179,25 @@ const AddMonitor = ({ getUsers, onAdd }) => {
           ))}
         </Select>
       </InputArea>
+      
+      {isMdSelected() && (
+        <InputArea>
+          <Label>Foto Perfil</Label>
+          <StyledStack direction="row" spacing={3}>
+            <Button variant="contained" endIcon={<SendIcon />}>
+              Foto Perfil
+            </Button>
+          </StyledStack>
+        </InputArea>
+      )}
 
-      <Button variant="contained" type="submit" disabled={loading}>
-        {loading ? "Aguarde..." : "Adicionar Novo Monitor"}
-      </Button>
+      <StyledStack direction="row" spacing={3}>
+        <Button variant="contained" type="submit" disabled={loading}>
+          {loading ? "Aguarde..." : "Adicionar Novo Monitor"}
+        </Button>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </StyledStack>
 
       {/* Componente de ToastContainer para exibir mensagens de sucesso/erro */}
       <ToastContainer />

@@ -15,7 +15,7 @@ const DisciplinasRestricted = ({openAddDisciplinas, handleCloseAddDisciplinas  }
   return (
 
   
-      <div className="main-content">
+
       
         <Modal
           open={openAddDisciplinas}
@@ -39,7 +39,7 @@ const DisciplinasRestricted = ({openAddDisciplinas, handleCloseAddDisciplinas  }
             <ToastContainer />
           </Box>
         </Modal>
-    </div>
+
   );
 };
 

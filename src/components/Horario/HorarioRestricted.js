@@ -11,7 +11,7 @@ const HorarioRestricted = ({  openAddHorario, handleCloseAddHorario}) => {
   };
 
   return (
-      <div className="main-content">
+  
         <Modal
           open={openAddHorario}
           onClose={handleCloseAddHorario}
@@ -34,7 +34,7 @@ const HorarioRestricted = ({  openAddHorario, handleCloseAddHorario}) => {
             <ToastContainer />
           </Box>
         </Modal>
-      </div>
+
 
   );
 };

@@ -1,8 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { Typography, CardContent, CardMedia ,Card as MuiCard } from "@mui/material";
+import styled from "styled-components";
 
+const StyledCard = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr; /* Coluna automática para a imagem e uma coluna para o conteúdo */
+  gap: 20px; /* Espaçamento entre as colunas */
+  padding: 10px;
+  max-width: 900px;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Centraliza o card na tela */
+  display: flex;
+  align-items: center; /* Centraliza o conteúdo verticalmente */  
+`;
+
+const StyledCardContent = styled(CardContent)`
+  text-align: flex-start;
+`;
+
+const CustomCard = styled(MuiCard)`
+`;
+
+const StyledCardMedia = styled(CardMedia)`
+  /* Add your styles for CardMedia here */
+  /* For example, you can set a max-width or add a box-shadow */
+  max-width: 20%;
+ 
+`;
+const StyledTitulo = styled.h1`
+  text-align: center;
+  /* Add any additional styles you want for the h1 element */
+`;
 const MonitorCard = () => {
-  const [monitoresData, setMonitoresData] = useState([]);
-  const [horariosData, setHorariosData] = useState([]);
+  const [combinedData, setCombinedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,11 +47,17 @@ const MonitorCard = () => {
         }
 
         const data = await response.json();
-        console.log("Data received:", data); // Add this line
+        console.log("Data received:", data);
 
         if (data.monitores && data.horarios) {
-          setMonitoresData(data.monitores);
-          setHorariosData(data.horarios);
+          const combined = data.monitores.map((monitor, index) => {
+            return {
+              monitor,
+              horario: data.horarios[index],
+            };
+          });
+
+          setCombinedData(combined);
         } else {
           throw new Error("Dados de monitores ou horários não encontrados na resposta.");
         }
@@ -48,25 +84,28 @@ const MonitorCard = () => {
   }
 
   return (
-    <div>
-      <h1>Monitores</h1>
-      {monitoresData.map((monitor, index) => (
-        <div key={index} className="card">
-          <h2>{monitor.nome}</h2>
-          <p>RA: {monitor.ra}</p>
-          <p>Email: {monitor.email}</p>
-          {/* Add additional fields as needed */}
-        </div>
+    <CustomCard>
+   <StyledTitulo>
+      Acessos às Salas de Monitoria 1º Semestre de 2022
+    </StyledTitulo>
+      {combinedData.map(({ monitor, horario }, index) => (
+        <StyledCard key={index}>
+          <StyledCardMedia
+            component="img"
+            alt={monitor.nome}
+            height="140"
+            image={monitor.imagemPerfil}
+          />
+          <StyledCardContent>
+            <h2>{monitor.nome}</h2>
+            <Typography>RA: {monitor.ra}</Typography>
+            <Typography>Email: <a href="email"> {monitor.email}</a></Typography>
+            <Typography>Disciplina: <strong> {horario.nomeDisciplina} </strong></Typography>
+            <Typography>Horário: {horario.DiaSemana}: {horario.HorarioInicio} às {horario.HorarioTermino}</Typography>
+          </StyledCardContent>
+        </StyledCard>
       ))}
-      {horariosData.map((horario, index) => (
-        <div key={index} className="card">
-          <p>Disciplina: {horario.DisciplinaID}</p>
-          <p>Dia da Semana: {horario.DiaSemana}</p>
-          <p>Horário: {horario.HorarioInicio} às {horario.HorarioTermino}</p>
-          {/* Add additional fields as needed */}
-        </div>
-      ))}
-    </div>
+    </CustomCard>
   );
 };
 

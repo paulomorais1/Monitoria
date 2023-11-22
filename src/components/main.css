@@ -1,19 +1,19 @@
 .container{ 
  display: flex;
- justify-content: center;
- text-align: center;
+ justify-content: flex-start;
+ text-align: flex-start;
  flex-wrap: wrap;
- border: 2px solid red;
+gap: 10px;
 
 }
 
 .header{
  display: grid;
- grid-template-columns: 1fr;
- border: 2px solid red;
+ grid-template-columns: auto;
+
 }
 
 .actions{
-    border: 2px solid red;
+
     
 }

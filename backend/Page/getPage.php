@@ -30,7 +30,10 @@ try {
     $resultMonitores = $conn->query($sqlMonitores);
 
     // Consulta SQL para obter dados da tabela horariosmonitoria
-    $sqlHorarios = "SELECT * FROM horariosmonitoria";
+    $sqlHorarios = "SELECT h.* , d.nome AS nomeDisciplina
+    FROM `horariosmonitoria` h
+    INNER JOIN `disciplinas` d on (h.DisciplinaID = d.ID)
+    LIMIT 5 ;";
     $resultHorarios = $conn->query($sqlHorarios);
 
     // Verifica erros nas execuções das consultas
