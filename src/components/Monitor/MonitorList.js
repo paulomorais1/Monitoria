@@ -7,12 +7,43 @@ import {
   DialogActions,
   Button,
   Snackbar,
+  Paper
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import "./MonitorList.css";
 import DeleteMonitor from "./DeleteMonitor";
 import { toast } from "react-toastify";
 import UpdateMonitor from "./UpdateMonitor"; // Importe o componente UpdateMonitor
+import styled from "styled-components";
+
+const MonitorListContainer = styled(Paper)`
+  margin: 20px auto;
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-right: 5px;
+    }
+  }
+`;
 
 const MonitorList = ({ monitorType, onDelete }) => {
   const [monitorData, setMonitorData] = useState([]);
@@ -84,7 +115,7 @@ const MonitorList = ({ monitorType, onDelete }) => {
   };
 
   return (
-    <React.Fragment>
+    <MonitorListContainer>
       <div className="container">
        
         <table className="table">
@@ -102,7 +133,7 @@ const MonitorList = ({ monitorType, onDelete }) => {
           <tbody>
             {monitorData.map((monitor) => (
               <tr key={monitor.ID}>
-                        <td>{monitor.ID}</td>
+                  <td>{monitor.ID}</td>
                   <td>{monitor.Nome}</td>
                   <td>{monitor.Email}</td>
                   <td>{monitor.Ra}</td>
@@ -176,7 +207,7 @@ const MonitorList = ({ monitorType, onDelete }) => {
           </MuiAlert>
         </Snackbar>
       </div>
-    </React.Fragment>
+    </MonitorListContainer>
   );
 };
 

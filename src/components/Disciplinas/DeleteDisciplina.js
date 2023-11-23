@@ -27,7 +27,7 @@ const DeleteDisciplinas = ({ setError, toast, onDelete, setLoading, disciplinaDa
   
     try {
       const response = await fetch(
-        'http://localhost:8080/Disciplinas/deleteDisciplina.php',
+        'http://localhost:8080/Disciplinas/deleteDisciplinas.php',
         requestOptions
       );
   

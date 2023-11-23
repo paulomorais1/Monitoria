@@ -1,38 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Typography, CardContent, CardMedia ,Card as MuiCard } from "@mui/material";
-import styled from "styled-components";
+import { Typography, CardContent, CardMedia, Card as MuiCard } from "@mui/material";
 
-const StyledCard = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr; /* Coluna automática para a imagem e uma coluna para o conteúdo */
-  gap: 20px; /* Espaçamento entre as colunas */
-  padding: 10px;
-  max-width: 900px;
-  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Centraliza o card na tela */
-  display: flex;
-  align-items: center; /* Centraliza o conteúdo verticalmente */  
-`;
-
-const StyledCardContent = styled(CardContent)`
-  text-align: flex-start;
-`;
-
-const CustomCard = styled(MuiCard)`
-`;
-
-const StyledCardMedia = styled(CardMedia)`
-  /* Add your styles for CardMedia here */
-  /* For example, you can set a max-width or add a box-shadow */
-  max-width: 20%;
- 
-`;
-const StyledTitulo = styled.h1`
-  text-align: center;
-  /* Add any additional styles you want for the h1 element */
-`;
 const MonitorCard = () => {
-  const [combinedData, setCombinedData] = useState([]);
+  const [monitorData, setMonitorData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -47,31 +17,22 @@ const MonitorCard = () => {
         }
 
         const data = await response.json();
-        console.log("Data received:", data);
 
-        if (data.monitores && data.horarios) {
-          const combined = data.monitores.map((monitor, index) => {
-            return {
-              monitor,
-              horario: data.horarios[index],
-            };
-          });
+        console.log("Dados do servidor:", data);
 
-          setCombinedData(combined);
+        if (data.monitores) {
+          setMonitorData(data.monitores);
         } else {
-          throw new Error("Dados de monitores ou horários não encontrados na resposta.");
+          throw new Error("Dados de monitores não encontrados na resposta.");
         }
       } catch (error) {
         console.error("Erro ao obter dados:", error.message);
-        setError(
-          "Erro ao obter dados. Verifique a console para detalhes."
-        );
+        setError("Erro ao obter dados. Verifique a console para detalhes.");
       } finally {
         setLoading(false);
       }
     };
 
-    // Call the function when the component mounts (empty dependency array)
     getMonitorData();
   }, []);
 
@@ -83,29 +44,66 @@ const MonitorCard = () => {
     return <p>{error}</p>;
   }
 
+  const organizeHorarios = (horarios) => {
+    const disciplinas = {};
+    horarios.forEach((horario) => {
+      const { DisciplinaID, nomeDisciplina, DiaSemana, HorarioInicio, HorarioTermino } = horario;
+      if (!disciplinas[DisciplinaID]) {
+        disciplinas[DisciplinaID] = {
+          nomeDisciplina,
+          horarios: [],
+        };
+      }
+      disciplinas[DisciplinaID].horarios.push({ DiaSemana, HorarioInicio, HorarioTermino });
+    });
+
+    return Object.values(disciplinas).map((disciplina) => ({
+      ...disciplina,
+      horarios: disciplina.horarios.sort((a, b) => {
+        const dayComparison = diasSemana.indexOf(a.DiaSemana) - diasSemana.indexOf(b.DiaSemana);
+        if (dayComparison !== 0) return dayComparison;
+        return a.HorarioInicio.localeCompare(b.HorarioInicio);
+      }),
+    }));
+  };
+
+  const diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
+
+  const formatarHorarios = (horarios) => {
+    return horarios.map((horario, index) => {
+      return `${horario.DiaSemana}: ${horario.HorarioInicio} às ${horario.HorarioTermino}`;
+    }).join(', ');
+  };
+
   return (
-    <CustomCard>
-   <StyledTitulo>
-      Acessos às Salas de Monitoria 1º Semestre de 2022
-    </StyledTitulo>
-      {combinedData.map(({ monitor, horario }, index) => (
-        <StyledCard key={index}>
-          <StyledCardMedia
+    <MuiCard sx={{ display: 'grid', gridGap: 5, gridTemplateColumns: 'repeat(auto-fit, minmax(1fr))', gap: 10, padding: 10, maxWidth: 1100, margin: '0 auto', alignItems: 'center' }}>
+      <Typography variant="h5" fontSize={24} fontWeight="bold">
+        Acessos às Salas de Monitoria 1º Semestre de 2022
+      </Typography>
+      {Object.values(monitorData).map((monitor) => (
+        <MuiCard key={monitor.id} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
+          <CardMedia
             component="img"
-            alt={monitor.nome}
-            height="140"
+            alt={monitor}
+            sx={{ width: { xs: '100%', sm: '25%' }, height: { xs: '140px', sm: 'max-content' } }}
             image={monitor.imagemPerfil}
           />
-          <StyledCardContent>
-            <h2>{monitor.nome}</h2>
-            <Typography>RA: {monitor.ra}</Typography>
-            <Typography>Email: <a href="email"> {monitor.email}</a></Typography>
-            <Typography>Disciplina: <strong> {horario.nomeDisciplina} </strong></Typography>
-            <Typography>Horário: {horario.DiaSemana}: {horario.HorarioInicio} às {horario.HorarioTermino}</Typography>
-          </StyledCardContent>
-        </StyledCard>
+          <CardContent sx={{ width: '70%' }}>
+            <Typography variant="h6" fontSize={20} fontWeight="bold">
+              {monitor.nome}
+            </Typography>
+            <Typography fontSize={16}>RA: {monitor.ra}</Typography>
+            <Typography fontSize={16}>Email: <a href={`mailto:${monitor.email}`}>{monitor.email}</a></Typography>
+            {monitor.horarios && organizeHorarios(monitor.horarios).map((disciplina, index) => (
+              <div key={index}>
+                <Typography variant="subtitle1" fontSize={18}>Disciplina: <strong>{disciplina.nomeDisciplina}</strong></Typography>
+                <Typography variant="body2" fontSize={18}>Horários: {formatarHorarios(disciplina.horarios)}</Typography>
+              </div>
+            ))}
+          </CardContent>
+        </MuiCard>
       ))}
-    </CustomCard>
+    </MuiCard>
   );
 };
 

@@ -26,14 +26,14 @@ try {
     $tipo = "MD";
 
     // Consulta SQL para obter dados da tabela monitores
-    $sqlMonitores = "SELECT nome, ra, email FROM monitores WHERE tipo = 'MD'";
+    $sqlMonitores = "SELECT id, nome, ra, email FROM monitores WHERE tipo = 'MD'";
     $resultMonitores = $conn->query($sqlMonitores);
 
     // Consulta SQL para obter dados da tabela horariosmonitoria
-    $sqlHorarios = "SELECT h.* , d.nome AS nomeDisciplina
-    FROM `horariosmonitoria` h
-    INNER JOIN `disciplinas` d on (h.DisciplinaID = d.ID)
-    LIMIT 5 ;";
+    $sqlHorarios = "SELECT h.*, d.nome AS nomeDisciplina
+                    FROM `horariosmonitoria` h
+                    INNER JOIN `disciplinas` d ON (h.DisciplinaID = d.ID)
+                    ORDER BY h.MonitorID, FIELD(h.DiaSemana, 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'), h.HorarioInicio ASC";
     $resultHorarios = $conn->query($sqlHorarios);
 
     // Verifica erros nas execuções das consultas
@@ -44,25 +44,25 @@ try {
     // Converte os resultados em arrays associativos
     $dataMonitores = array();
     while ($row = $resultMonitores->fetch_assoc()) {
-        $dataMonitores[] = $row;
+        $dataMonitores[$row['id']] = $row;
+        $dataMonitores[$row['id']]['horarios'] = array();
     }
 
-    $dataHorarios = array();
     while ($row = $resultHorarios->fetch_assoc()) {
-        $dataHorarios[] = $row;
+        // Adiciona o horário ao monitor correspondente
+        $dataMonitores[$row['MonitorID']]['horarios'][] = array(
+            'ID' => $row['ID'],
+            'DiaSemana' => $row['DiaSemana'],
+            'HorarioInicio' => $row['HorarioInicio'],
+            'HorarioTermino' => $row['HorarioTermino'],
+            'DisciplinaID' => $row['DisciplinaID'],
+            'nomeDisciplina' => $row['nomeDisciplina']
+        );
     }
-
-    // Verifica se houve erro ao codificar para JSON
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception('Erro ao codificar dados para JSON: ' . json_last_error_msg());
-    }
-
-    // Logs de sucesso antes de enviar a resposta JSON
-    error_log("Dados a serem enviados: Monitores - " . json_encode($dataMonitores) . ", Horarios - " . json_encode($dataHorarios));
 
     // Retorna os dados em formato JSON
     header('Content-Type: application/json');
-    echo json_encode(array('monitores' => $dataMonitores, 'horarios' => $dataHorarios));
+    echo json_encode(array('monitores' => $dataMonitores));
 
 } catch (Exception $e) {
     // Captura exceções e retorna uma resposta de erro detalhada

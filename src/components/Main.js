@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Typography, Button } from "@mui/material";
 import MonitorList from "./Monitor/MonitorList";
