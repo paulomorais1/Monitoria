@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 21/11/2023 às 10:53
+-- Tempo de geração: 23/11/2023 às 03:36
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -38,8 +38,12 @@ CREATE TABLE `disciplinas` (
 --
 
 INSERT INTO `disciplinas` (`ID`, `Nome`, `Professor`) VALUES
-(1, 'Engenharia de Software', 'Profª. Daniela Gibertoni'),
-(2, 'Engenharia de Software', 'Prof. Carlos Filho');
+(1, 'ALGORITMOS E LOGICA DE PROGRAMAÇÃO + ESTRUTURA DE DADOS+ LINGUAGEM DE PROGRAMACAO + INTRODUÇÃO À PROGRAMAÇÃO', 'Prof. Eder'),
+(2, 'ALGORITMOS E LÓGICA DE PROGRAMAÇÃO + INTRODUÇÃO À PROGRAMAÇÃO', 'Prof. Eder'),
+(3, 'CÁLCULO + CÁLCULO I + CÁLCULO II +ESTATÍSTICA', 'Profº'),
+(4, 'ALGORITMOS E LÓGICA DE PROGRAMAÇÃO + LINGUAGEM DE PROGRAMAÇÃO + INTRODUÇÃO À PROGRAMAÇÃO', 'Profº'),
+(5, 'PESQUISA OPERACIONAL + PROGRAMAÇÃO LINEAR ', 'Prof°'),
+(6, 'FÍSICA', 'Prof°');
 
 -- --------------------------------------------------------
 
@@ -61,7 +65,29 @@ CREATE TABLE `horariosmonitoria` (
 --
 
 INSERT INTO `horariosmonitoria` (`ID`, `DiaSemana`, `HorarioInicio`, `HorarioTermino`, `MonitorID`, `DisciplinaID`) VALUES
-(5, '123', '01:23:12', '00:01:23', 50, 1);
+(8, 'Segunda-feira', '07:40:00', '11:10:00', 1, 5),
+(9, 'Quarta-feira', '11:20:00', '12:40:00', 1, 5),
+(10, 'Quinta-feira', '11:20:00', '12:40:00', 1, 5),
+(11, 'Sexta-feira', '07:40:00', '09:30:00', 1, 5),
+(12, 'Terça-feira', '07:30:00', '09:30:00', 2, 3),
+(13, 'Quarta-feira', '11:15:00', '12:45:00', 2, 3),
+(14, 'Quinta-feira', '11:15:00', '12:45:00', 2, 3),
+(15, 'Sexta-feira', '00:12:40', '15:40:00', 2, 3),
+(16, 'Quarta-Feira', '20:30:00', '22:30:00', 3, 4),
+(17, 'Sexta-feira', '15:00:00', '19:00:00', 3, 4),
+(18, 'Segunda-feira', '16:00:00', '19:00:00', 4, 1),
+(19, 'Quarta-feira', '16:00:00', '19:00:00', 4, 1),
+(20, 'Sexta-feira', '15:00:00', '17:00:00', 4, 1),
+(21, 'Segunda-feira', '17:00:00', '19:00:00', 5, 2),
+(22, 'Terça-feira', '17:30:00', '19:00:00', 5, 2),
+(23, 'Quarta-feira', '17:30:00', '19:00:00', 5, 2),
+(24, 'Quinta-Feira', '17:30:00', '19:00:00', 5, 2),
+(25, 'Sexta-feira', '17:30:00', '19:00:00', 5, 2),
+(26, 'Segunda-feira', '18:00:00', '19:00:00', 6, 6),
+(27, 'Terça-Feira', '18:00:00', '19:00:00', 6, 6),
+(28, 'Quarta-Feira', '18:00:00', '19:00:00', 6, 6),
+(29, 'Quinta-feira', '18:00:00', '19:00:00', 6, 6),
+(30, 'Sexta-feira', '18:00:00', '19:00:00', 6, 6);
 
 -- --------------------------------------------------------
 
@@ -95,7 +121,12 @@ CREATE TABLE `monitores` (
 --
 
 INSERT INTO `monitores` (`ID`, `Nome`, `Email`, `Ra`, `Tipo`) VALUES
-(50, 'ANDRESA MEDALHA SINCHETTI', 'andresa.sinchetti@fatec.sp.gov.br', '0220912021006', 'MD');
+(1, 'ANDRESA MEDALHA SINCHETTI', 'andresa.sinchetti@fatec.sp.gov.br', '0220912021006', 'MD'),
+(2, 'CELIA HIDALGO PEREIRA', 'celia.pereira@fatec.sp.gov.br', '0220911921005', 'MD'),
+(3, 'GABRIEL OLIVEIRA SILVA', 'gabriel.silva523@fatec.sp.gov.br', '0220482113002', 'MD'),
+(4, 'HIGOR FRANCISCO DE ABREU', 'higor.abreu@fatec.sp.gov.br', '0220481922020', 'MD'),
+(5, 'JOSÉ VITOR MICHELIN', 'jose.michelin@fatec.sp.gov.br', '0220482123002', 'MD'),
+(6, 'RAFAEL TREVIZANELI DE MOURA', 'rafael.moura25@fatec.sp.gov.br', '0220912121013', 'MD');
 
 -- --------------------------------------------------------
 
@@ -157,13 +188,13 @@ ALTER TABLE `processosseletivos`
 -- AUTO_INCREMENT de tabela `disciplinas`
 --
 ALTER TABLE `disciplinas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `horariosmonitoria`
 --
 ALTER TABLE `horariosmonitoria`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de tabela `inscricoes`
@@ -175,7 +206,7 @@ ALTER TABLE `inscricoes`
 -- AUTO_INCREMENT de tabela `monitores`
 --
 ALTER TABLE `monitores`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT de tabela `processosseletivos`
