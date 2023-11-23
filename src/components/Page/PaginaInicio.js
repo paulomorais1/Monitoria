@@ -77,27 +77,35 @@ const MonitorCard = () => {
 
   return (
     <MuiCard sx={{ display: 'grid', gridGap: 5, gridTemplateColumns: 'repeat(auto-fit, minmax(1fr))', gap: 10, padding: 10, maxWidth: 1100, margin: '0 auto', alignItems: 'center' }}>
-      <Typography variant="h5" fontSize={24} fontWeight="bold">
-        Acessos às Salas de Monitoria 1º Semestre de 2022
+          
+      <div sx={{padding:'2'}}>
+
+      <Typography variant="h5" fontSize={36} fontWeight="bold" justifyContent={"center"} textAlign={"center"} word-break="break-all">
+        Acessos às Salas de Monitoria 
       </Typography>
+      <Typography variant="h5" fontSize={36} fontWeight="bold" justifyContent={"center"} textAlign={"center"} word-break="break-all">
+      1º Semestre de 2022
+      </Typography>
+      </div>
+  
       {Object.values(monitorData).map((monitor) => (
-        <MuiCard key={monitor.id} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
+        <MuiCard key={monitor.id} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: "center", alignItems:'center'}}>
           <CardMedia
             component="img"
             alt={monitor}
-            sx={{ width: { xs: '100%', sm: '25%' }, height: { xs: '140px', sm: 'max-content' } }}
-            image={monitor.imagemPerfil}
+            sx={{ width: { xs: '40%', md: '35%' , sm:'25%' }, height: { xs: '140px', md:'max-content', sm: 'max-content' } }}
+            image={'https://png.pngtree.com/png-vector/20220608/ourlarge/pngtree-user-profile-character-faceless-unknown-png-image_4816132.png'}
           />
-          <CardContent sx={{ width: '70%' }}>
-            <Typography variant="h6" fontSize={20} fontWeight="bold">
+          <CardContent sx={{ width: '70%', }}>
+            <Typography variant="h6" fontSize={20} fontWeight="bold" textTransform='uppercase' lineHeight='40px' >
               {monitor.nome}
             </Typography>
-            <Typography fontSize={16}>RA: {monitor.ra}</Typography>
-            <Typography fontSize={16}>Email: <a href={`mailto:${monitor.email}`}>{monitor.email}</a></Typography>
+            <Typography fontSize={16} lineHeight='40px' textTransform='uppercase'>RA: {monitor.ra}</Typography>
+            <Typography fontSize={16} lineHeight='40px' >EMAIL: <a href={`mailto:${monitor.email}`}>{monitor.email}</a></Typography>
             {monitor.horarios && organizeHorarios(monitor.horarios).map((disciplina, index) => (
               <div key={index}>
-                <Typography variant="subtitle1" fontSize={18}>Disciplina: <strong>{disciplina.nomeDisciplina}</strong></Typography>
-                <Typography variant="body2" fontSize={18}>Horários: {formatarHorarios(disciplina.horarios)}</Typography>
+                <Typography variant="subtitle1" fontSize={22}  lineHeight='40px' textTransform='uppercase'>Disciplina: <strong>{disciplina.nomeDisciplina}</strong></Typography>
+                <Typography variant="body2" fontSize={18}  lineHeight='40px'>HORÁRIOS: {formatarHorarios(disciplina.horarios)}</Typography>
               </div>
             ))}
           </CardContent>
