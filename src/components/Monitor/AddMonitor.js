@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
-import SendIcon from '@mui/icons-material/Send';
-import Stack from '@mui/material/Stack';
+import SendIcon from "@mui/icons-material/Send";
+import Stack from "@mui/material/Stack";
 import "react-toastify/dist/ReactToastify.css";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 
 const FormContainer = styled.form`
   display: grid;
@@ -28,14 +30,6 @@ const InputArea = styled.div`
   margin: 0 auto;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 0 10px;
-  border-radius: 5px;
-  height: 40px;
-  width: 90%;
-`;
-
 const Select = styled.select`
   width: 100%;
   padding: 0 10px;
@@ -44,27 +38,39 @@ const Select = styled.select`
   width: 90%;
 `;
 const StyledStack = styled(Stack)`
-display:flex;
-justify-content:center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `;
+
 const Label = styled.label``;
-// ... (importações existentes)
 
 const AddMonitor = ({ getUsers, onAdd }) => {
   const ref = useRef();
-  const [tipoOptions, setTipoOptions] = useState(["MD", "MIDIT"]);
+  const [tipoOptions, setTipoOptions] = useState(["None", "MD", "MDIT"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showImageInput, setShowImageInput] = useState(false);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    // Faça algo com o arquivo, se necessário
+    console.log("Arquivo selecionado:", file);
+  };
+
+  const handleTipoChange = (e) => {
+    const selectedTipo = e.target.value;
+    setShowImageInput(selectedTipo === 'MD');
+  };
+
+  const isMdSelected = () => {
+    const monitors = ref.current;
+    return monitors && monitors.Tipo && monitors.Tipo.value === "MD";
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      // Faça algo com o arquivo, se necessário
-      console.log("Arquivo selecionado:", file);
-    };
-    
     const monitors = ref.current;
 
     if (!monitors) {
@@ -82,6 +88,17 @@ const AddMonitor = ({ getUsers, onAdd }) => {
       return;
     }
 
+    // Verifica se a opção é "MD" e o campo de imagem está visível
+    if (isMdSelected() && showImageInput) {
+      const imagemPerfil = monitors.imagemPerfil.value;
+      const urlFotoPerfil = monitors.UrlFotoPerfil.value;
+
+      if (!imagemPerfil && !urlFotoPerfil) {
+        console.error("Preencha a URL da imagem de perfil ou envie uma imagem.");
+        return;
+      }
+    }
+
     setLoading(true);
     setError(null);
 
@@ -90,6 +107,9 @@ const AddMonitor = ({ getUsers, onAdd }) => {
       Email: monitors.Email.value,
       Ra: monitors.Ra.value,
       Tipo: monitors.Tipo.value,
+      // Adicione os campos necessários para a URL ou imagem de perfil, conforme a lógica do seu backend
+      ImagemPerfil: monitors.imagemPerfil ? monitors.imagemPerfil.value : "",
+      UrlFotoPerfil: monitors.UrlFotoPerfil ? monitors.UrlFotoPerfil.value : "",
     };
 
     const requestOptions = {
@@ -127,7 +147,6 @@ const AddMonitor = ({ getUsers, onAdd }) => {
         toast.success("Monitor adicionado com sucesso!");
 
         // Recarrega a página após o sucesso na adição
-        
       } else {
         console.error(
           `Erro na requisição: ${response.status} ${response.statusText}`
@@ -136,7 +155,9 @@ const AddMonitor = ({ getUsers, onAdd }) => {
           "Erro durante a adição do monitor. Consulte a console para detalhes."
         );
         // Exibir Toast de erro
-        toast.error("Erro ao adicionar monitor. Consulte a console para detalhes.");
+        toast.error(
+          "Erro ao adicionar monitor. Consulte a console para detalhes."
+        );
       }
     } catch (error) {
       console.error("Erro durante a adição do monitor:", error.message);
@@ -144,34 +165,48 @@ const AddMonitor = ({ getUsers, onAdd }) => {
         "Erro durante a adição do monitor. Consulte a console para detalhes."
       );
       // Exibir Toast de erro
-      toast.error("Erro ao adicionar monitor. Consulte a console para detalhes.");
+      toast.error(
+        "Erro ao adicionar monitor. Consulte a console para detalhes."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const isMdSelected = () => {
-    const monitors = ref.current;
-    return monitors && monitors.Tipo.value === "MD";
-  };
-
   return (
     <FormContainer ref={ref} onSubmit={handleSubmit}>
       <InputArea>
-        <Label>Nome</Label>
-        <Input name="Nome" />
+        <TextField
+          name="Nome"
+          label="Nome"
+          variant="outlined"
+          margin="normal"
+          required
+        />
       </InputArea>
       <InputArea>
-        <Label>Email</Label>
-        <Input name="Email" type="email" />
+        <TextField
+          label="Email:"
+          name="Email"
+          type="email"
+          variant="outlined"
+          margin="normal"
+          required
+        />
       </InputArea>
       <InputArea>
-        <Label>Ra</Label>
-        <Input name="Ra" />
+        <TextField
+          label="Ra:"
+          name="Ra"
+          type="number"
+          variant="outlined"
+          margin="normal"
+          required
+        />
       </InputArea>
       <InputArea>
         <Label>Tipo</Label>
-        <Select name="Tipo">
+        <Select name="Tipo" onChange={handleTipoChange}>
           {tipoOptions.map((tipo, index) => (
             <option key={index} value={tipo}>
               {tipo}
@@ -179,19 +214,43 @@ const AddMonitor = ({ getUsers, onAdd }) => {
           ))}
         </Select>
       </InputArea>
-      
-      {isMdSelected() && (
-        <InputArea>
-          <Label>Foto Perfil</Label>
-          <StyledStack direction="row" spacing={3}>
-            <Button variant="contained" endIcon={<SendIcon />}>
-              Foto Perfil
-            </Button>
-          </StyledStack>
-        </InputArea>
+
+      {showImageInput && (
+        <StyledStack>
+          <Grid container spacing={2} alignItems="center" justifyContent="center" padding="10px">
+            <Grid item>
+              <TextField
+                label="Url foto de Perfil"
+                name="UrlFotoPerfil"
+                type="url"
+                variant="outlined"
+                margin="normal"
+                required
+              />
+            </Grid>
+            <Grid item>
+              <input
+                type="file"
+                name="imagemPerfil"
+                onChange={handleFileChange}
+                accept="image/*"
+                style={{ display: 'none' }}
+              />
+              <label htmlFor="imagemPerfil">
+                <Button
+                  component="span"
+                  variant="contained"
+                  endIcon={<SendIcon />}
+                >
+                  Enviar Foto
+                </Button>
+              </label>
+            </Grid>
+          </Grid>
+        </StyledStack>
       )}
 
-      <StyledStack direction="row" spacing={3}>
+      <StyledStack direction="row" spacing={1}>
         <Button variant="contained" type="submit" disabled={loading}>
           {loading ? "Aguarde..." : "Adicionar Novo Monitor"}
         </Button>
