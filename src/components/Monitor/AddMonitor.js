@@ -47,7 +47,7 @@ const Label = styled.label``;
 
 const AddMonitor = ({ getUsers, onAdd }) => {
   const ref = useRef();
-  const [tipoOptions, setTipoOptions] = useState(["None", "MD", "MDIT"]);
+  const [tipoOptions, setTipoOptions] = useState(["", "MD", "MDIT"]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showImageInput, setShowImageInput] = useState(false);
@@ -175,6 +175,7 @@ const AddMonitor = ({ getUsers, onAdd }) => {
 
   return (
     <FormContainer ref={ref} onSubmit={handleSubmit}>
+      <h2>Adicionar Monitor</h2>
       <InputArea>
         <TextField
           name="Nome"

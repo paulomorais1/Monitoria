@@ -7,13 +7,15 @@ import {
   DialogActions,
   Button,
   Snackbar,
-  Paper
+  Paper,
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import "./MonitorList.css";
 import DeleteMonitor from "./DeleteMonitor";
 import { toast } from "react-toastify";
 import UpdateMonitor from "./UpdateMonitor"; // Importe o componente UpdateMonitor
+import EditIcon from "@mui/icons-material/Edit";
+
 import styled from "styled-components";
 
 const MonitorListContainer = styled(Paper)`
@@ -117,7 +119,10 @@ const MonitorList = ({ monitorType, onDelete }) => {
   return (
     <MonitorListContainer>
       <div className="container">
-       
+      <h2>Lista de Monitores {monitorType}</h2>
+
+
+
         <table className="table">
           <thead>
             <tr>
@@ -133,19 +138,23 @@ const MonitorList = ({ monitorType, onDelete }) => {
           <tbody>
             {monitorData.map((monitor) => (
               <tr key={monitor.ID}>
-                  <td>{monitor.ID}</td>
-                  <td>{monitor.Nome}</td>
-                  <td>{monitor.Email}</td>
-                  <td>{monitor.Ra}</td>
-                  <td>{monitor.Tipo}</td>
-                <td>
-                  <button onClick={() => handleEditClick(monitor.ID)}>
-                    Editar
-                  </button>
+                <td>{monitor.ID}</td>
+                <td>{monitor.Nome}</td>
+                <td>{monitor.Email}</td>
+                <td>{monitor.Ra}</td>
+                <td>{monitor.Tipo}</td>
+                <td style={{ textAlign: "center" }}>
+                  <EditIcon
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => handleEditClick(monitor.ID)}
+                    style={{cursor:"pointer"}}
+                  />
                 </td>
                 <td>
                   <DeleteMonitor
-                    setError={setError}
+              setError={setError}
                     toast={toast}
                     onDelete={(deletedID) => setDeletedMonitorID(deletedID)}
                     setLoading={setLoading}
@@ -166,7 +175,7 @@ const MonitorList = ({ monitorType, onDelete }) => {
                   (monitor) => monitor.ID === editingMonitorID
                 )}
                 onUpdate={() => {
-                  setShowSuccessToast(true); // Exemplo de toast de sucesso após a atualização
+                  setShowSuccessToast(true); 
                   closeModal();
                 }}
                 onCancel={closeModal}

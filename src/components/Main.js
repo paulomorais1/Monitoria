@@ -16,29 +16,28 @@ const Lista = () => {
   const [openAddMonitor, setOpenAddMonitor] = useState(false);
   const [openAddDisciplinas, setOpenAddDisciplinas] = useState(false);
   const [openAddHorario, setOpenAddHorario] = useState(false);
-
   const [openListType, setOpenListType] = useState(undefined);
 
   const handleHorarioTypeClick = (horarioType) => {
     setSelectedHorarioType(horarioType);
-    setOpenListType('HorarioList');
+    setOpenListType("HorarioList");
   };
 
   const handleMonitorTypeClick = (monitorType) => {
     setSelectedMonitorType(monitorType);
-    setOpenListType('MonitorList');
+    setOpenListType("MonitorList");
   };
 
   const handleDisciplinaTypeClick = (disciplinaType) => {
     setSelectedDisciplinaType(disciplinaType);
-    setOpenListType('DisciplinasList');
+    setOpenListType("DisciplinasList");
   };
 
   const handleOpenAddMonitor = () => {
     setOpenAddMonitor(true);
     setOpenListType(null); // Feche qualquer lista aberta ao adicionar um monitor
   };
-  
+
   const handleCloseAddMonitor = () => {
     setOpenAddMonitor(false);
     setOpenListType(null); // Feche a lista ao fechar o conteúdo
@@ -52,7 +51,6 @@ const Lista = () => {
   const handleCloseAddDisciplinas = () => {
     setOpenAddDisciplinas(false);
     setOpenListType(null); // Close any open list when adding disciplinas
-
   };
 
   const handleOpenAddHorario = () => {
@@ -63,7 +61,6 @@ const Lista = () => {
   const handleCloseAddHorario = () => {
     setOpenAddHorario(false);
     setOpenListType(null); // Close any open list when adding disciplinas
-
   };
 
   const handleCloseModal = () => {
@@ -75,13 +72,25 @@ const Lista = () => {
       <div className="header">
         <Typography variant="h5">Gerir Monitores</Typography>
         <div className="actions">
-          <Button variant="contained" onClick={handleOpenAddMonitor}>
+          <Button
+            variant="contained"
+            onClick={handleOpenAddMonitor}
+            className={selectedMonitorType === null ? "selected" : ""}
+          >
             Adicionar Monitor
           </Button>
-          <Button variant="contained" onClick={() => handleMonitorTypeClick("MD")}>
+          <Button
+            variant="contained"
+            onClick={() => handleMonitorTypeClick("MD")}
+            className={selectedMonitorType === "MD" ? "selected" : ""}
+          >
             Monitores MD
           </Button>
-          <Button variant="contained" onClick={() => handleMonitorTypeClick("MIDIT")}>
+          <Button
+            variant="contained"
+            onClick={() => handleMonitorTypeClick("MIDIT")}
+            className={selectedMonitorType === "MIDIT" ? "selected" : ""}
+          >
             Monitores MIDIT
           </Button>
         </div>
@@ -89,10 +98,20 @@ const Lista = () => {
       <div className="header">
         <Typography variant="h5">Gerir Disciplinas</Typography>
         <div className="actions">
-          <Button variant="contained" onClick={() => handleOpenAddDisciplinas()}>
-            Adicionar  disciplina
+          <Button
+            variant="contained"
+            onClick={handleOpenAddDisciplinas}
+            className={selectedDisciplinaType === null ? "selected" : ""}
+          >
+            Adicionar disciplina
           </Button>
-          <Button variant="contained" onClick={() => handleDisciplinaTypeClick()}>
+          <Button
+            variant="contained"
+            onClick={() => handleDisciplinaTypeClick("Disciplinas")}
+            className={
+              selectedDisciplinaType === "Disciplinas" ? "selected" : ""
+            }
+          >
             Disciplinas
           </Button>
         </div>
@@ -100,32 +119,45 @@ const Lista = () => {
       <div className="header">
         <Typography variant="h5">Gerir Horarios</Typography>
         <div className="actions">
-          <Button variant="contained" onClick={() => handleOpenAddHorario()}>
+          <Button
+            variant="contained"
+            onClick={handleOpenAddHorario}
+            className={selectedHorarioType === null ? "selected" : ""}
+          >
             Adicionar Horario
           </Button>
-          <Button variant="contained" onClick={() => handleHorarioTypeClick(selectedHorarioType)}>
+          <Button
+            variant="contained"
+            onClick={() => handleHorarioTypeClick(selectedHorarioType)}
+            className={selectedHorarioType !== null ? "selected" : ""}
+          >
             Horários
           </Button>
         </div>
       </div>
-   
-      {openListType === 'HorarioList' && <HorarioList horarioType={selectedHorarioType} />}
-      {openListType === 'MonitorList' && <MonitorList monitorType={selectedMonitorType} />}
-      {openListType === 'DisciplinasList' && <DisciplinasList disciplinaType={selectedDisciplinaType} />} 
-        <MonitorRestricted
-          openAddMonitor={openAddMonitor}
-          handleCloseAddMonitor={handleCloseAddMonitor}
-        />
-        <DisciplinasRestricted
-          openAddDisciplinas={openAddDisciplinas}
-          handleCloseAddDisciplinas={handleCloseAddDisciplinas}
-        />
-        <HorarioRestricted
-          openAddHorario={openAddHorario}
-          handleCloseAddHorario={handleCloseAddHorario}
-        />
-      </div>
-   
+
+      {openListType === "HorarioList" && (
+        <HorarioList horarioType={selectedHorarioType} />
+      )}
+      {openListType === "MonitorList" && (
+        <MonitorList monitorType={selectedMonitorType} />
+      )}
+      {openListType === "DisciplinasList" && (
+        <DisciplinasList disciplinaType={selectedDisciplinaType} />
+      )}
+      <MonitorRestricted
+        openAddMonitor={openAddMonitor}
+        handleCloseAddMonitor={handleCloseAddMonitor}
+      />
+      <DisciplinasRestricted
+        openAddDisciplinas={openAddDisciplinas}
+        handleCloseAddDisciplinas={handleCloseAddDisciplinas}
+      />
+      <HorarioRestricted
+        openAddHorario={openAddHorario}
+        handleCloseAddHorario={handleCloseAddHorario}
+      />
+    </div>
   );
 };
 

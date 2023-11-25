@@ -74,7 +74,7 @@ const DeleteHorario = ({ setError, onDelete, setLoading, horarioData }) => {
 
   return (
     <IconButton aria-label='delete' onClick={handleDeleteClick}>
-      <DeleteIcon />
+      <DeleteIcon color='secondary' />
     </IconButton>
   );
 };

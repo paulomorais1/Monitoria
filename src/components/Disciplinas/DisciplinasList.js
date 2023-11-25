@@ -8,12 +8,45 @@ import {
   DialogActions,
   Button,
   Snackbar,
+  Paper
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import DeleteDisciplina from "./DeleteDisciplina";
 import { toast } from "react-toastify";
+import EditIcon from "@mui/icons-material/Edit";
 import UpdateDisciplina from "./UpdateDisciplina";
+import styled from "styled-components";
 
+
+
+const DisciplinaListContainer = styled(Paper)`
+  margin: 20px auto;
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-right: 5px;
+    }
+  }
+`;
 const DisciplinasList = ({ disciplinaType, onDelete, getDisciplinas }) => {
   const [disciplinaData, setDisciplinaData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,14 +117,13 @@ const DisciplinasList = ({ disciplinaType, onDelete, getDisciplinas }) => {
   };
 
   return (
-    <React.Fragment>
+    <DisciplinaListContainer>
       <div className="container">
         <div className="row">
           <div className="col-md-10 mt-4">
-            <h5 className="mb-4">
-              Programa de Monitoria de Iniciação em Desenvolvimento Tecnológico
-              e Inovação – MIDTI nas seguintes linhas de pesquisa:
-            </h5>
+            <h2 className="mb-4">
+          Lista de Disciplinas 
+            </h2>
             <table className="table">
               <thead>
                 <tr>
@@ -109,9 +141,9 @@ const DisciplinasList = ({ disciplinaType, onDelete, getDisciplinas }) => {
                     <td>{disciplina.Nome}</td>
                     <td>{disciplina.Professor}</td>
                     <td>
-                      <button onClick={() => handleEditClick(disciplina.ID)}>
-                        Editar
-                      </button>
+                   
+              <EditIcon onClick={() => handleEditClick(disciplina.ID)}/>
+              
                     </td>
                     <td>
                       <DeleteDisciplina
@@ -181,7 +213,7 @@ const DisciplinasList = ({ disciplinaType, onDelete, getDisciplinas }) => {
           Ops! Algo deu errado. Verifique a console para detalhes.
         </MuiAlert>
       </Snackbar>
-    </React.Fragment>
+    </DisciplinaListContainer>
   );
 };
 

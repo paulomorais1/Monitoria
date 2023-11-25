@@ -93,7 +93,7 @@ const MonitorCard = () => {
           <CardMedia
             component="img"
             alt={monitor}
-            sx={{ width: { xs: '40%', md: '35%' , sm:'25%' }, height: { xs: '140px', md:'max-content', sm: 'max-content' } }}
+            sx={{ width: { xs: '30%', md: '25%' , sm:'20%' }, height: { xs: '140', md:'max-content', sm: 'max-content' } }}
             image={'https://png.pngtree.com/png-vector/20220608/ourlarge/pngtree-user-profile-character-faceless-unknown-png-image_4816132.png'}
           />
           <CardContent sx={{ width: '70%', }}>
@@ -104,7 +104,7 @@ const MonitorCard = () => {
             <Typography fontSize={16} lineHeight='40px' >EMAIL: <a href={`mailto:${monitor.email}`}>{monitor.email}</a></Typography>
             {monitor.horarios && organizeHorarios(monitor.horarios).map((disciplina, index) => (
               <div key={index}>
-                <Typography variant="subtitle1" fontSize={22}  lineHeight='40px' textTransform='uppercase'>Disciplina: <strong>{disciplina.nomeDisciplina}</strong></Typography>
+                <Typography variant="subtitle1" fontSize={18}  lineHeight='40px' textTransform='uppercase'>Disciplina: <strong>{disciplina.nomeDisciplina}</strong></Typography>
                 <Typography variant="body2" fontSize={18}  lineHeight='40px'>HORÁRIOS: {formatarHorarios(disciplina.horarios)}</Typography>
               </div>
             ))}

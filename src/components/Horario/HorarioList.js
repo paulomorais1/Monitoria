@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Paper, Button, Snackbar } from "@mui/material";
+import { Button, Paper, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import UpdateHorario from "./UpdateHorario";
 import DeleteHorario from "./DeleteHorario";
-import { toast } from "react-toastify";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const HorarioListContainer = styled(Paper)`
   margin: 20px auto;
@@ -71,7 +73,6 @@ const HorarioList = ({ onDelete, horarioData }) => {
         const response = await fetch(
           "http://localhost:8080/Horario/getHorarios.php"
         );
-    
 
         const responseData = await response.json();
 
@@ -95,7 +96,6 @@ const HorarioList = ({ onDelete, horarioData }) => {
   }, [deletedHorarioID]);
 
   const handleDeleteClick = async () => {
-   
     try {
       await onDelete(deletedHorarioID);
       setDeletedHorarioID(null);
@@ -112,6 +112,7 @@ const HorarioList = ({ onDelete, horarioData }) => {
       ) : (
         <div>
           <table>
+          
             <thead>
               <tr>
                 <th>Dia da Semana</th>
@@ -119,7 +120,8 @@ const HorarioList = ({ onDelete, horarioData }) => {
                 <th>Horário de Término</th>
                 <th>ID do Monitor</th>
                 <th>ID da Disciplina</th>
-                <th>Ações</th>
+                <th>Editar</th>
+                <th>Del</th>
               </tr>
             </thead>
             <tbody>
@@ -130,21 +132,25 @@ const HorarioList = ({ onDelete, horarioData }) => {
                   <td>{horario.HorarioTermino}</td>
                   <td>{horario.MonitorID}</td>
                   <td>{horario.DisciplinaID}</td>
-                  <td>
-                    <Button
+                  <td style={{ textAlign: "center" }}>
+                    <EditIcon
+                      style={{ cursor: "pointer" }}
                       variant="contained"
                       color="primary"
                       size="small"
                       onClick={() => handleEditClick(horario.ID)}
-                    >
-                      Editar
-                    </Button>
-                    <DeleteHorario
-                      setError={setError}
-                      onDelete={() => handleDeleteClick(horario.ID)} // Certifique-se de passar a propriedade correta
-                      setLoading={setLoading}
-                      horarioData={horario} // Certifique-se de passar a propriedade correta
                     />
+                  </td>
+                  <td>
+                    <DeleteHorario
+                      
+                      setError={setError}
+                      onDelete={() => handleDeleteClick(horario.ID)}
+                      setLoading={setLoading}
+                      horarioData={horario}
+                      startIcon={<DeleteIcon />}
+                    />
+                    
                   </td>
                 </tr>
               ))}

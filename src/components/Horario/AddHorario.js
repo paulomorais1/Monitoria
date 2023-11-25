@@ -23,6 +23,9 @@ const FormContainer = styled.form`
   width: 80%;
 `;
 
+const Label = styled.label``;
+
+
 const AddHorario = () => {
   const [diaSemana, setDiaSemana] = useState('');
   const [horarioInicio, setHorarioInicio] = useState('');
@@ -99,15 +102,19 @@ const AddHorario = () => {
           value={diaSemana}
           onChange={(e) => setDiaSemana(e.target.value)}
         />
+        <Label>Horário de Início</Label>
         <TextField
-          label="Horário de Início"
+       
           variant="outlined"
           margin="normal"
+          type='time'
           value={horarioInicio}
           onChange={(e) => setHorarioInicio(e.target.value)}
         />
+        <Label>Horário de Término</Label>
+
         <TextField
-          label="Horário de Término"
+          type='time'
           variant="outlined"
           margin="normal"
           value={horarioTermino}
@@ -115,6 +122,7 @@ const AddHorario = () => {
         />
         <TextField
           label="ID do Monitor"
+          type='number'
           variant="outlined"
           margin="normal"
           value={monitorID}
@@ -122,6 +130,7 @@ const AddHorario = () => {
         />
         <TextField
           label="ID da Disciplina"
+          type='number'
           variant="outlined"
           margin="normal"
           value={disciplinaID}

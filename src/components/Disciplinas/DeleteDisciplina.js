@@ -71,7 +71,7 @@ const DeleteDisciplinas = ({ setError, toast, onDelete, setLoading, disciplinaDa
 
   return (
     <IconButton aria-label='delete' onClick={handleDeleteClick}>
-      <DeleteIcon />
+      <DeleteIcon color='secondary' />
     </IconButton>
   );
 };

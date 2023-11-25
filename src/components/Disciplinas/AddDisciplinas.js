@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { toast, ToastContainer } from "react-toastify";
+import TextField from "@mui/material/TextField";
 import "react-toastify/dist/ReactToastify.css";
 
 const FormContainer = styled.form`
@@ -129,13 +130,22 @@ const AddDisciplinas = ({ getDisciplinas, onAdd }) => {
 
   return (
     <FormContainer ref={ref} onSubmit={handleSubmit}>
+      <h2>Adicionar Disciplina</h2>
       <InputArea>
-        <Label>Nome</Label>
-        <Input name="Nome" />
+        
+        <TextField
+           name="Nome"
+           label="Nome Disciplina"
+           variant="outlined"
+           margin="normal"
+           required/>
       </InputArea>
       <InputArea>
-        <Label>Professor</Label>
-        <Input name="Professor" />
+       <TextField    name="Professor"
+          label="Nome Professor"
+          variant="outlined"
+          margin="normal"
+          required/>
       </InputArea>
 
       <Button variant="contained" type="submit" disabled={loading}>
